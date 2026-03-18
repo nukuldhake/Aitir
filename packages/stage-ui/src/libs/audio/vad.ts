@@ -37,6 +37,7 @@ export interface BaseVAD {
   processAudio: (inputBuffer: Float32Array) => Promise<void>
   on: <K extends keyof VADEvents>(event: K, callback: VADEventCallback<K>) => void
   off: <K extends keyof VADEvents>(event: K, callback: VADEventCallback<K>) => void
+  dispose: () => void | Promise<void>
 }
 
 export interface VADAudioOptions {

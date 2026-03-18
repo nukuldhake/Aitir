@@ -3,6 +3,7 @@ import type { PreTrainedModel } from '@huggingface/transformers'
 import type { BaseVAD, BaseVADConfig, VADEventCallback, VADEvents } from '../../libs/audio/vad'
 
 import { AutoModel, Tensor } from '@huggingface/transformers'
+import { isWebGPUSupported } from 'gpuu/webgpu'
 
 /**
  * Voice Activity Detection processor
@@ -48,11 +49,17 @@ export class VAD implements BaseVAD {
     try {
       this.emit('status', { type: 'info', message: 'Loading VAD model...' })
 
+      const device = await isWebGPUSupported() ? 'webgpu' : 'wasm'
+
       // Full-precision
-      this.model = await AutoModel.from_pretrained('onnx-community/silero-vad', { config: { model_type: 'custom' } as any, dtype: 'fp32' })
+      this.model = await AutoModel.from_pretrained('onnx-community/silero-vad', {
+        config: { model_type: 'custom' } as any,
+        dtype: 'fp32',
+        device,
+      })
       this.isReady = true
 
-      this.emit('status', { type: 'info', message: 'VAD model loaded successfully' })
+      this.emit('status', { type: 'info', message: `VAD model loaded successfully on ${device}` })
     }
     catch (error) {
       this.emit('status', { type: 'error', message: `Failed to load VAD model: ${error}` })
@@ -267,6 +274,26 @@ export class VAD implements BaseVAD {
     // Update sample rate tensor if needed
     if (newConfig.sampleRate) {
       this.sampleRateTensor = new Tensor('int64', [this.config.sampleRate], [])
+    }
+  }
+
+  /**
+   * Release resources used by the VAD model
+   */
+  public dispose(): void {
+    try {
+      if (this.model && typeof (this.model as any).dispose === 'function') {
+        (this.model as any).dispose()
+      }
+    } catch (e) {
+      console.warn('Failed to dispose VAD model gracefully', e)
+    } finally {
+      this.model = undefined
+      this.isReady = false
+      this.eventListeners = {}
+      // Clear buffers
+      this.buffer = new Float32Array(0)
+      this.prevBuffers = []
     }
   }
 }

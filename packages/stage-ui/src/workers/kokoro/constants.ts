@@ -36,6 +36,13 @@ export const KOKORO_MODELS = [
     descriptionKey: 'settings.pages.providers.provider.kokoro-local.models.fp32-webgpu.description',
   },
   {
+    id: 'fp16-webgpu',
+    name: 'FP16 (WebGPU)',
+    platform: 'webgpu',
+    quantization: 'fp16',
+    descriptionKey: 'settings.pages.providers.provider.kokoro-local.models.fp16-webgpu.description',
+  },
+  {
     id: 'fp32',
     name: 'FP32 (WASM)',
     platform: 'wasm',
@@ -100,5 +107,5 @@ export function kokoroModelsToModelInfo(hasWebGPU: boolean, t?: (key: string) =>
  * @returns The default model to use
  */
 export function getDefaultKokoroModel(hasWebGPU: boolean): KokoroQuantization {
-  return hasWebGPU ? 'fp32-webgpu' : 'q4f16'
+  return hasWebGPU ? 'fp16-webgpu' : 'q4f16'
 }

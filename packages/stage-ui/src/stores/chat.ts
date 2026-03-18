@@ -45,14 +45,23 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
    */
   function stripMetadata(text: string): string {
     // Strip ACT: prefix if present
-    const cleaned = text.replace(/^(?:<\|)?ACT\s*:[^A-Z]*/i, '')
-    // Look for the primary boundary (double newline)
+    let cleaned = text.replace(/^(?:<\|)?ACT\s*:[^A-Z]*/i, '')
+    
+    // Aggressive cleanup for smaller models that invent pseudo-formats like "(Param: idle)" or "Neutral: "
+    cleaned = cleaned.replace(/^\s*\([^)]*\)\s*/g, '') // Strip leading parenthetical metadata
+    cleaned = cleaned.replace(/^[A-Z][a-z]+(?:\s+\([^)]+\))?:\s*/g, '') // Strip leading "Emotion: " or "Neutral (Param: idle): "
+    cleaned = cleaned.replace(/^\s*[|$!].*?[|}>]\s*/g, '') // Strip pipe, exclamation, or dollar based metadata: | motion | Think | ! emotion | Curious | } | $action>
+    cleaned = cleaned.replace(/<(?:action|think|thought|reasoning)>.*?<\/(?:action|think|thought|reasoning)>/gi, '') // Strip XML-like tags correctly
+    cleaned = cleaned.replace(/<(?:action|think|thought|reasoning)>.*?>/gi, '') // Strip unclosed tags too
+    cleaned = cleaned.replace(/^(?:Reasoning|Think|Thought|Emotion)\b\s*/gi, '') // Strip standalone headers like "Reasoning"
+    
+    // Look for the primary boundary (double newline) or explicit end tags
     const doubleNewlineIndex = cleaned.indexOf('\n\n')
     if (doubleNewlineIndex !== -1) {
       return cleaned.slice(doubleNewlineIndex + 2).trimStart()
     }
-    // Fallback: look for the last closing brace or quote before what looks like a sentence start
-    const match = /["}]\s+[A-Z]/i.exec(cleaned)
+    // Fallback: look for the last closing brace, quote, or angle bracket before what looks like a sentence start
+    const match = /["}>]\s+[A-Z]/i.exec(cleaned)
     if (match && match.index !== undefined) {
       return cleaned.slice(match.index + match[0].length - 1).trimStart()
     }
@@ -149,8 +158,11 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
       const firstChar = trimmed[0]
       const isLikelyMetadata = startsWithMetadata
         || firstChar === '{'
-        || firstChar === 'A' // ACT:
-        || firstChar === '<' // <|ACT:
+        || trimmed.startsWith('ACT:')
+        || trimmed.startsWith('<|ACT')
+        || firstChar === '<' // <action>
+        || firstChar === '$' // $action>
+        || firstChar === '|' // | emotion |
 
       if (!isLikelyMetadata) {
         // No metadata at all, release everything but still scan for inline JSON

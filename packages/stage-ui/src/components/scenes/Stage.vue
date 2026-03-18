@@ -363,6 +363,10 @@ playbackManager.onStart(({ item }) => {
   catch {
     // BroadcastChannel may be closed - don't break playback
   }
+
+  if (item.text) {
+    vrmViewerRef.value?.simulateSpeechGestures(item.text)
+  }
 })
 
 function startLipSyncLoop() {

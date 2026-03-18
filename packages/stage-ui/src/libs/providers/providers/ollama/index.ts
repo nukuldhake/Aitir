@@ -30,9 +30,43 @@ export const providerOllama = defineProvider({
         section: 'advanced',
         type: 'key-values',
       }),
+    numGpu: z.number()
+      .int()
+      .min(0)
+      .optional()
+      .meta({
+        labelLocalized: t('settings.pages.providers.catalog.edit.config.common.fields.field.num-gpu.label'),
+        descriptionLocalized: t('settings.pages.providers.catalog.edit.config.common.fields.field.num-gpu.description'),
+        section: 'advanced',
+      }),
   }),
-  createProvider(config) {
-    return createOllama('', config.baseUrl)
+  createProvider(config: any) {
+    const provider = createOllama('', config.baseUrl as string)
+
+    // Inject num_gpu option if provided
+    if (config.numGpu !== undefined) {
+      const originalChat = provider.chat.bind(provider)
+      provider.chat = (model: string) => {
+        const chat = originalChat(model)
+        const originalFetch = chat.fetch || globalThis.fetch
+        chat.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+          if (init?.body && typeof init.body === 'string') {
+            try {
+              const body = JSON.parse(init.body)
+              body.options = { ...body.options, num_gpu: config.numGpu }
+              init.body = JSON.stringify(body)
+            }
+            catch (e) {
+              console.warn('Failed to inject num_gpu into Ollama request:', e)
+            }
+          }
+          return (originalFetch as any)(input, init)
+        }
+        return chat
+      }
+    }
+
+    return provider
   },
   validationRequiredWhen: () => true,
   validators: {

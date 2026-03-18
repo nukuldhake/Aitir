@@ -354,6 +354,9 @@ pages:
                     The base url used to connect to remote service. Often looks
                     like http://localhost:11434/v1 or https://example.com/v1.
                   placeholder: Base url...
+                num-gpu:
+                  label: GPU Layers (num_gpu)
+                  description: Number of layers to offload to GPU. Set to 0 to use CPU, or a high number (e.g. 35) to force full GPU usage.
                 headers:
                   label: Custom HTTP Headers
                   description: Add custom HTTP headers
@@ -531,7 +534,9 @@ pages:
               description: Smaller models load faster but may have slightly lower quality.
         models:
           fp32-webgpu:
-            description: Full precision model using WebGPU - Recommended for supported devices
+            description: Full precision model using WebGPU - Recommended for supported devices (RTX 30 series+)
+          fp16-webgpu:
+            description: Half precision model using WebGPU - Uses less VRAM, recommended for 4GB-6GB cards.
           fp32:
             description: Full precision model
           fp16:

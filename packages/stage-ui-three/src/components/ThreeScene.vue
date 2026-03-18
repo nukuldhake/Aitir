@@ -302,6 +302,9 @@ defineExpose({
   triggerNod: () => {
     modelRef.value?.triggerNod()
   },
+  simulateSpeechGestures: (text: string) => {
+    modelRef.value?.simulateSpeechGestures(text)
+  },
   canvasElement: () => {
     return tresCanvasRef.value?.renderer.instance.domElement
   },

@@ -27,13 +27,26 @@ async function loadModel(quantization: string, device: string) {
     return
   }
 
-  // Map fp32-webgpu to fp32 for the model
-  const modelQuantization = quantization === 'fp32-webgpu' ? 'fp32' : quantization
+  // Match quantization string to supported dtypes
+  const modelQuantization = quantization as 'fp32' | 'fp16' | 'q8' | 'q4' | 'q4f16'
+
+  // Clean up previous model before loading a new one
+  if (ttsModel) {
+    try {
+      if (typeof (ttsModel as any).dispose === 'function') {
+        (ttsModel as any).dispose()
+      }
+    } catch (e) {
+      console.warn('[Kokoro Worker] Failed to dispose previous model', e)
+    } finally {
+      ttsModel = null
+    }
+  }
 
   ttsModel = await KokoroTTS.from_pretrained(
     'onnx-community/Kokoro-82M-v1.0-ONNX',
     {
-      dtype: modelQuantization as 'fp32' | 'fp16' | 'q8' | 'q4' | 'q4f16',
+      dtype: modelQuantization,
       device: device as 'wasm' | 'webgpu' | 'cpu',
       progress_callback: (progress) => {
         const message: ProgressMessage = {

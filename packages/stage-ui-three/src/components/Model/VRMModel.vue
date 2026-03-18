@@ -588,6 +588,9 @@ defineExpose({
   triggerNod() {
     talkingSway.triggerNod()
   },
+  simulateSpeechGestures(text: string) {
+    talkingSway.simulateSpeechGestures(text)
+  },
   scene: computed(() => vrm.value?.scene),
   lookAtUpdate(target: Vec3) {
     idleEyeSaccades.instantUpdate(vrm.value, target)
