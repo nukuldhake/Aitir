@@ -117,7 +117,7 @@ const live2dLipSyncOptions: Live2DLipSyncOptions = { mouthUpdateIntervalMs: 50, 
 
 const { activeCard } = storeToRefs(useAiriCardStore())
 const speechStore = useSpeechStore()
-const { ssmlEnabled, activeSpeechProvider, activeSpeechModel, activeSpeechVoice, pitch } = storeToRefs(speechStore)
+const { ssmlEnabled, activeSpeechProvider, activeSpeechModel, activeSpeechVoice, activeSpeechVoiceId, pitch, speechProviderError } = storeToRefs(speechStore)
 const activeCardId = computed(() => activeCard.value?.name ?? 'default')
 const speechRuntimeStore = useSpeechRuntimeStore()
 
@@ -165,12 +165,17 @@ async function playFunction(item: Parameters<Parameters<typeof createPlaybackMan
   if (!audioContext || !item.audio)
     return
 
+  console.info('[Stage] [Playback] Attempting to play audio. Context state:', audioContext.state)
+
   // Ensure audio context is resumed (browsers suspend it by default until user interaction)
   if (audioContext.state === 'suspended') {
     try {
+      console.info('[Stage] [Playback] AudioContext is suspended, attempting to resume...')
       await audioContext.resume()
+      console.info('[Stage] [Playback] AudioContext state after resume:', audioContext.state)
     }
-    catch {
+    catch (error) {
+      console.error('[Stage] [Playback] Failed to resume AudioContext:', error)
       return
     }
   }
@@ -180,6 +185,7 @@ async function playFunction(item: Parameters<Parameters<typeof createPlaybackMan
   source.buffer = item.audio
   nowSpeaking.value = true
 
+  console.info('[Stage] [Playback] Connecting source and starting. Buffer duration:', source.buffer.duration)
   source.connect(audioContext.destination)
   if (audioAnalyser.value)
     source.connect(audioAnalyser.value)
@@ -259,15 +265,15 @@ const speechPipeline = createSpeechPipeline<AudioBuffer>({
     let model = activeSpeechModel.value
     let voice = activeSpeechVoice.value
 
-    if (activeSpeechProvider.value === 'openai-compatible-audio-speech') {
+    if (['openai-compatible-audio-speech', 'fish-speech-local'].includes(activeSpeechProvider.value)) {
       // Always prefer provider config for OpenAI Compatible (user configured it there)
       if (providerConfig?.model) {
         model = providerConfig.model as string
       }
       else {
         // Fallback to default if not in provider config
-        model = 'tts-1'
-        console.warn('[Speech Pipeline] OpenAI Compatible: No model in provider config, using default', { providerConfig })
+        model = activeSpeechProvider.value === 'fish-speech-local' ? 'fish-speech-1.5' : 'tts-1'
+        console.warn('[Speech Pipeline] No model in provider config, using default', { providerConfig })
       }
 
       if (providerConfig?.voice) {
@@ -278,21 +284,21 @@ const speechPipeline = createSpeechPipeline<AudioBuffer>({
           previewURL: '',
           languages: [{ code: 'en', title: 'English' }],
           provider: activeSpeechProvider.value,
-          gender: 'neutral',
+          gender: 'female',
         }
       }
       else {
         // Fallback to default if not in provider config
         voice = {
-          id: 'alloy',
-          name: 'alloy',
-          description: 'alloy',
+          id: activeSpeechProvider.value === 'fish-speech-local' ? 'egirl_energetic_01' : 'alloy',
+          name: activeSpeechProvider.value === 'fish-speech-local' ? 'egirl_energetic_01' : 'alloy',
+          description: activeSpeechProvider.value === 'fish-speech-local' ? 'egirl_energetic_01' : 'alloy',
           previewURL: '',
           languages: [{ code: 'en', title: 'English' }],
           provider: activeSpeechProvider.value,
-          gender: 'neutral',
+          gender: 'female',
         }
-        console.warn('[Speech Pipeline] OpenAI Compatible: No voice in provider config, using default', { providerConfig })
+        console.warn('[Speech Pipeline] No voice in provider config, using default', { providerConfig })
       }
     }
 
@@ -322,7 +328,9 @@ const speechPipeline = createSpeechPipeline<AudioBuffer>({
       return audioBuffer
     }
     catch (error) {
-      console.error('[Stage] [TTS] Generation or decoding failed:', error)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      console.error('[Stage] [TTS] Generation or decoding failed. Provider:', activeSpeechProvider.value, 'Model:', activeSpeechModel.value, 'Voice:', activeSpeechVoiceId.value, 'Error:', error)
+      speechProviderError.value = errorMessage
       return null
     }
   },
