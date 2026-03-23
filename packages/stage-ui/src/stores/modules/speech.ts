@@ -10,6 +10,7 @@ import { computed, onMounted, watch } from 'vue'
 import { toXml } from 'xast-util-to-xml'
 import { x } from 'xastscript'
 
+import { getDefaultKokoroModel } from '../../workers/kokoro/constants'
 import { useProvidersStore } from '../providers'
 
 export function toSignedPercent(value: number): string {
@@ -116,26 +117,51 @@ export const useSpeechStore = defineStore('speech', () => {
   // Watch for provider changes and load voices
   watch(activeSpeechProvider, async (newProvider) => {
     if (newProvider) {
+      // If switching to Kokoro and no model is selected, set default model
+      if (newProvider === 'kokoro-local' && !activeSpeechModel.value) {
+        const hasWebGPU = typeof navigator !== 'undefined' && !!navigator.gpu
+        activeSpeechModel.value = getDefaultKokoroModel(hasWebGPU)
+      }
+
       await loadVoicesForProvider(newProvider)
       // Don't reset voice settings when changing providers to allow for persistence
     }
   }, {
-    // REVIEW: should we always load voices on init? What will happen when network is not available?
     immediate: true,
   })
 
+  async function initialize() {
+    // If no speech provider is configured, default to Kokoro TTS
+    if (!activeSpeechProvider.value) {
+      activeSpeechProvider.value = 'kokoro-local'
+    }
+
+    const voices = await loadVoicesForProvider(activeSpeechProvider.value)
+    if (activeSpeechVoiceId.value) {
+      activeSpeechVoice.value = voices.find(voice => voice.id === activeSpeechVoiceId.value)
+    }
+    else if (voices.length > 0) {
+      // Auto-select first voice if none selected
+      activeSpeechVoiceId.value = voices[0].id
+    }
+  }
+
   onMounted(() => {
-    loadVoicesForProvider(activeSpeechProvider.value).then(() => {
-      if (activeSpeechVoiceId.value) {
-        activeSpeechVoice.value = availableVoices.value[activeSpeechProvider.value]?.find(voice => voice.id === activeSpeechVoiceId.value)
-      }
-    })
+    initialize()
   })
 
   watch([activeSpeechVoiceId, availableVoices], ([voiceId, voices]) => {
+    const currentVoices = voices[activeSpeechProvider.value] || []
+
+    if (!voiceId && currentVoices.length > 0) {
+      // Auto-select first voice if none selected
+      activeSpeechVoiceId.value = currentVoices[0].id
+      return
+    }
+
     if (voiceId) {
-      // For OpenAI Compatible, create a custom voice object (no voices available from API)
-      if (activeSpeechProvider.value === 'openai-compatible-audio-speech') {
+      // For OpenAI Compatible or Fish-Speech, create a custom voice object (no voices available from API)
+      if (activeSpeechProvider.value === 'openai-compatible-audio-speech' || activeSpeechProvider.value === 'fish-speech-local') {
         // Always update to match voiceId (in case it changed)
         activeSpeechVoice.value = {
           id: voiceId,
@@ -149,7 +175,7 @@ export const useSpeechStore = defineStore('speech', () => {
       }
       else {
         // For other providers, find voice in available voices
-        const foundVoice = voices[activeSpeechProvider.value]?.find(voice => voice.id === voiceId)
+        const foundVoice = currentVoices.find(voice => voice.id === voiceId)
         // Only update if we found a voice, or if activeSpeechVoice is not set
         if (foundVoice || !activeSpeechVoice.value) {
           activeSpeechVoice.value = foundVoice
@@ -289,6 +315,7 @@ export const useSpeechStore = defineStore('speech', () => {
     filteredModels,
 
     // Actions
+    initialize,
     speech,
     loadVoicesForProvider,
     getVoicesForProvider,
