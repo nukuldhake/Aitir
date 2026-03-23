@@ -436,6 +436,9 @@ pages:
       alibaba-cloud-model-studio:
         description: bailian.console.aliyun.com
         title: Alibaba Cloud Model Studio
+      aliyun-nls:
+        description: nls-console.aliyun.com
+        title: Aliyun NLS
       anthropic:
         description: anthropic.com
         title: Anthropic | Claude
@@ -594,6 +597,12 @@ pages:
       openai:
         description: openai.com
         title: OpenAI
+      puter-elevenlabs:
+        description: Free ElevenLabs access via Puter.js
+        title: ElevenLabs (via Puter)
+      fish-speech-local:
+        description: Local high-quality expressive TTS engine.
+        title: Fish-Speech (Local)
       openai-compatible:
         description: OpenAI Compatible
         title: OpenAI Compatible
