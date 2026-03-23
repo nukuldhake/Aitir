@@ -867,7 +867,45 @@ export const useProvidersStore = defineStore('providers', () => {
           stability: 0.5,
         },
       }),
-      createProvider: async config => createUnElevenLabs((config.apiKey as string).trim(), (config.baseUrl as string).trim()) as SpeechProviderWithExtraOptions<string, UnElevenLabsOptions>,
+      createProvider: async (config) => {
+        const apiKey = (config.apiKey as string || '').trim()
+        const baseUrl = (config.baseUrl as string || '').trim()
+        const isDirect = baseUrl.includes('elevenlabs.io') || baseUrl.includes('/api/elevenlabs')
+
+        if (isDirect) {
+          // Direct ElevenLabs mode or local proxy
+          return {
+            speech: (model: string, _config: any) => ({
+              baseURL: baseUrl,
+              apiKey,
+              model,
+              fetch: async (_url: URL, init: RequestInit) => {
+                const body = JSON.parse(init.body as string)
+                const voiceId = body.voice
+                const text = body.input
+                const url = new URL(`text-to-speech/${voiceId}`, baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`)
+                return globalThis.fetch(url, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'xi-api-key': apiKey,
+                  },
+                  body: JSON.stringify({
+                    text,
+                    model_id: model,
+                    voice_settings: {
+                      similarity_boost: (config as any).voiceSettings?.similarityBoost ?? 0.75,
+                      stability: (config as any).voiceSettings?.stability ?? 0.5,
+                    },
+                  }),
+                })
+              },
+            }),
+          } as any
+        }
+
+        return createUnElevenLabs(apiKey, baseUrl) as SpeechProviderWithExtraOptions<string, UnElevenLabsOptions>
+      },
       capabilities: {
         listModels: async () => {
           return elevenLabsModels.map((model) => {
@@ -882,78 +920,61 @@ export const useProvidersStore = defineStore('providers', () => {
           })
         },
         listVoices: async (config) => {
-          const apiKey = (config.apiKey as string).trim()
-          const baseUrl = (config.baseUrl as string).trim()
+          const apiKey = (config.apiKey as string || '').trim()
+          const baseUrl = (config.baseUrl as string || '').trim()
+          const isDirect = baseUrl.includes('elevenlabs.io') || baseUrl.includes('/api/elevenlabs')
 
-          // We use a direct native fetch instead of the library's listVoices
-          // This ensures the 'xi-api-key' header is sent exactly as ElevenLabs expects.
-          const finalUrl = `${baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`}voices`
-
-          let voices
+          let voices: any[] = []
           try {
-            const response = await fetch(finalUrl, {
-              headers: {
-                'xi-api-key': apiKey,
-                'Content-Type': 'application/json',
-              },
-            })
-
-            if (!response.ok) {
-              const errorBody = await response.text()
-              console.error('ElevenLabs direct fetch failed:', response.status, errorBody)
-              throw new Error(`ElevenLabs API returned ${response.status}: ${errorBody}`)
+            if (isDirect) {
+              const url = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`
+              const response = await fetch(`${url}voices`, {
+                headers: { 'xi-api-key': apiKey },
+              })
+              const data = await response.json()
+              voices = data.voices || []
             }
-
-            // ElevenLabs returns { voices: [...] }, unspeech usually returns an array.
-            // We handle both cases for robustness.
-            const result = await response.json()
-            voices = Array.isArray(result) ? result : result.voices
+            else {
+              const provider = createUnElevenLabs(apiKey, baseUrl) as VoiceProviderWithExtraOptions<UnElevenLabsOptions>
+              const result = await listVoices({
+                ...provider.voice(),
+              })
+              voices = result || []
+            }
           }
           catch (error) {
-            console.error('Failed to list voices from ElevenLabs direct fetch:', error)
-            throw error
+            console.error('Error fetching voices for elevenlabs:', error)
+            voices = []
           }
 
-          if (!voices || !Array.isArray(voices)) {
-            console.warn('ElevenLabs API returned no voices or an invalid response format.')
-            return []
-          }
+          // Safety check
+          const safeVoices = voices || []
 
-          // Find indices of Aria and Bill (common default voices to rearrange)
-          const ariaIndex = voices.findIndex(voice => voice.name.includes('Aria'))
-          const billIndex = voices.findIndex(voice => voice.name.includes('Bill'))
-
-          // Determine the range to move (ensure valid indices and proper order)
-          // If neither found, just use the original array
-          if (ariaIndex === -1 && billIndex === -1) {
-            return voices.map(voice => ({
-              id: voice.voice_id || voice.id,
-              name: voice.name,
-              provider: 'elevenlabs',
-              previewURL: voice.preview_audio_url || voice.preview_url,
-              languages: voice.languages,
-            }))
-          }
+          // Find indices of Aria and Bill (keep existing sorting logic)
+          const ariaIndex = safeVoices.findIndex(voice => voice.name?.includes('Aria'))
+          const billIndex = safeVoices.findIndex(voice => voice.name?.includes('Bill'))
 
           const startIndex = ariaIndex !== -1 ? ariaIndex : 0
-          const endIndex = billIndex !== -1 ? billIndex : voices.length - 1
+          const endIndex = billIndex !== -1 ? billIndex : safeVoices.length - 1
           const lowerIndex = Math.min(startIndex, endIndex)
           const higherIndex = Math.max(startIndex, endIndex)
 
-          // Rearrange voices: voices outside the range first, then voices within the range
-          const rearrangedVoices = [
-            ...voices.slice(0, lowerIndex),
-            ...voices.slice(higherIndex + 1),
-            ...voices.slice(lowerIndex, higherIndex + 1),
-          ]
+          const rearrangedVoices = safeVoices.length > 0
+            ? [
+                ...safeVoices.slice(0, lowerIndex),
+                ...safeVoices.slice(higherIndex + 1),
+                ...safeVoices.slice(lowerIndex, higherIndex + 1),
+              ]
+            : []
 
           return rearrangedVoices.map((voice) => {
             return {
               id: voice.voice_id || voice.id,
               name: voice.name,
               provider: 'elevenlabs',
-              previewURL: voice.preview_audio_url || voice.preview_url,
-              languages: voice.languages,
+              previewURL: voice.preview_url || voice.preview_audio_url || '',
+              languages: voice.languages?.map((lang: any) => typeof lang === 'string' ? { code: lang, title: lang } : lang) || [],
+              gender: voice.gender || 'neutral',
             }
           })
         },
@@ -976,6 +997,115 @@ export const useProvidersStore = defineStore('providers', () => {
             valid: !!config.apiKey && !!config.baseUrl,
           }
         },
+      },
+    },
+    'puter-elevenlabs': {
+      id: 'puter-elevenlabs',
+      category: 'speech',
+      tasks: ['text-to-speech'],
+      nameKey: 'settings.pages.providers.provider.puter-elevenlabs.title',
+      name: 'ElevenLabs (via Puter)',
+      descriptionKey: 'settings.pages.providers.provider.puter-elevenlabs.description',
+      description: 'Free ElevenLabs access via Puter.js (No API key needed)',
+      icon: 'i-simple-icons:elevenlabs',
+      defaultOptions: () => ({
+        voice: '21m00Tcm4TlvDq8ikWAM', // Rachel
+        model: 'eleven_multilingual_v2',
+      }),
+      isAvailableBy: async () => typeof (globalThis as any).puter !== 'undefined',
+      createProvider: async () => {
+        return {
+          speech: (model: string) => ({
+            baseURL: 'https://js.puter.com/v2/', // Dummy for spec
+            apiKey: '',
+            model,
+            fetch: async (_url: URL, init: RequestInit) => {
+              const body = JSON.parse(init.body as string)
+              const text = body.input
+              let voiceId = body.voice
+
+              let realProvider = 'elevenlabs'
+              
+              // 1. AUTO-CLEAN: Remove 'azure-' or 'openai-' prefixes
+              if (voiceId.startsWith('azure-')) {
+                realProvider = 'azure'
+                voiceId = voiceId.replace('azure-', '')
+              }
+              else if (voiceId.startsWith('openai-')) {
+                realProvider = 'openai'
+                voiceId = voiceId.replace('openai-', '')
+              }
+
+              // 2. AUTO-CLEAN: Handle legacy technical names (e.g. en-US-JennyNeural)
+              // Puter expects just the simple name "Jenny"
+              if (voiceId.includes('Neural')) {
+                voiceId = voiceId.split('-').pop()?.replace('Neural', '') || voiceId
+              }
+
+              // @ts-expect-error Puter.js global
+              const audio = await puter.ai.txt2speech(text, {
+                provider: realProvider,
+                voice: voiceId,
+                // Models are usually handled by Puter, but we pass it for non-ElevenLabs providers
+                ...(realProvider !== 'elevenlabs' ? { model } : {}),
+              })
+
+              if (audio.success === false) {
+                throw new Error(`Puter Speech Error: ${audio.error || 'Unknown error'}`)
+              }
+
+              return globalThis.fetch(audio.src)
+            },
+          }),
+        } as any
+      },
+      capabilities: {
+        listModels: async () => {
+          return [
+            { id: 'eleven_multilingual_v2', name: 'Multilingual v2', provider: 'puter-elevenlabs', description: 'High-quality multilingual model', contextLength: 0, deprecated: false },
+            { id: 'eleven_flash_v2_5', name: 'Flash v2.5', provider: 'puter-elevenlabs', description: 'Fast generation with good quality', contextLength: 0, deprecated: false },
+            { id: 'eleven_turbo_v2_5', name: 'Turbo v2.5', provider: 'puter-elevenlabs', description: 'Ultra-fast generation', contextLength: 0, deprecated: false },
+          ] as ModelInfo[]
+        },
+        listVoices: async () => {
+          return [
+            // ElevenLabs (Working Triad)
+            { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel (Energetic)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'pFZP5JQG7iQjIQuC4Bku', name: 'Lily (Anime/Cute)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella (Soft/Cute)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            
+            // OpenAI (Verified Working)
+            { id: 'openai-nova', name: 'Nova (E-girl/Bubbly)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'openai-shimmer', name: 'Shimmer (Soft/Deep)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'openai-alloy', name: 'Alloy (Natural)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+
+            // Azure (Simplified Names - Most stable for Puter)
+            { id: 'azure-Jenny', name: 'Jenny (Bubbly/Anime)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Aria', name: 'Aria (Anime Student)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Ana', name: 'Ana (High-pitched/Kawaii)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Emma', name: 'Emma (Polite/Anime)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Ava', name: 'Ava (Sassy/Teen)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Zariyah', name: 'Zariyah (Calm/Soft)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Jane', name: 'Jane (Youthful/Energetic)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Michelle', name: 'Michelle (Professional)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Sara', name: 'Sara (Natural)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Natasha', name: 'Natasha (Soft/Sweet)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Nanami', name: 'Nanami (Japanese Anime)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Nancy', name: 'Nancy (Sweet)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Seoyeon', name: 'Seoyeon (K-Drama Style)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Lupe', name: 'Lupe (Warm)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Niamh', name: 'Niamh (Soft UK)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Sonia', name: 'Sonia (Energetic)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Libby', name: 'Libby (Soft)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Clara', name: 'Clara (Sweet)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Neerja', name: 'Neerja (Soft)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Olivia', name: 'Olivia (Natural)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+            { id: 'azure-Sophia', name: 'Sophia (Friendly)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
+          ] as VoiceInfo[]
+        },
+      },
+      validators: {
+        validateProviderConfig: () => ({ valid: true, errors: [], reason: '' }),
       },
     },
     'deepgram-tts': {
@@ -1062,6 +1192,71 @@ export const useProvidersStore = defineStore('providers', () => {
         },
       },
     },
+    'fish-speech-local': {
+      id: 'fish-speech-local',
+      category: 'speech',
+      tasks: ['text-to-speech'],
+      name: 'Fish-Speech (Local)',
+      nameKey: 'settings.pages.providers.provider.fish-speech-local.title',
+      descriptionKey: 'settings.pages.providers.provider.fish-speech-local.description',
+      description: 'Run Fish-Speech locally for high-quality expressive voices.',
+      icon: 'i-solar:fish-bold',
+      defaultOptions: () => ({
+        baseUrl: 'http://127.0.0.1:8080/v1/',
+        model: 'fish-speech-1.5',
+      }),
+      createProvider: async (config) => {
+        return createOpenAI('', (config.baseUrl as string).trim())
+      },
+      capabilities: {
+        listModels: async () => {
+          return [
+            { id: 'fish-speech-1.5', name: 'Fish Speech v1.5 (Optimized)', provider: 'fish-speech-local', description: 'Latest Fish Speech model', contextLength: 0, deprecated: false },
+            { id: 'fish-speech-1.4', name: 'Fish Speech v1.4', provider: 'fish-speech-local', description: 'Previous stable version', contextLength: 0, deprecated: false },
+          ] as ModelInfo[]
+        },
+        listVoices: async (config) => {
+          try {
+            const baseUrl = (config.baseUrl as string).trim()
+            const res = await fetch(`${baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`}voices`)
+            if (!res.ok)
+              throw new Error('Failed to fetch voices')
+            const data = await res.json()
+            return data.map((v: any) => ({
+              id: v.id,
+              name: v.name || v.id,
+              provider: 'fish-speech-local',
+              gender: 'female',
+            }))
+          }
+          catch (e) {
+            console.warn('Failed to auto-discover Fish-Speech voices:', e)
+            return [
+              { id: 'egirl_energetic_01', name: 'Energetic Anime E-girl', provider: 'fish-speech-local', gender: 'female' },
+              { id: 'anime_kawaii_01', name: 'Kawaii Anime Voice', provider: 'fish-speech-local', gender: 'female' },
+              { id: 'studio_energetic_02', name: 'Energetic Studio Voice', provider: 'fish-speech-local', gender: 'female' },
+              { id: 'default', name: 'Default Local Voice', provider: 'fish-speech-local', gender: 'female' },
+            ]
+          }
+        },
+      },
+      validators: {
+        validateProviderConfig: (config) => {
+          const errors: Error[] = []
+          const baseUrlValidationResult = baseUrlValidator.value(config.baseUrl)
+          if (baseUrlValidationResult) {
+            errors.push(...(baseUrlValidationResult.errors as Error[]))
+          }
+
+          return {
+            errors,
+            reason: errors.map(e => e.message).join(', '),
+            valid: errors.length === 0,
+          }
+        },
+      },
+    },
+
     'microsoft-speech': {
       id: 'microsoft-speech',
       category: 'speech',
@@ -1685,7 +1880,7 @@ export const useProvidersStore = defineStore('providers', () => {
         },
       },
     },
-  }
+  };
 
   // Progressive migration bridge:
   // translate unified provider definitions from libs/providers to legacy store metadata.
@@ -1805,8 +2000,14 @@ export const useProvidersStore = defineStore('providers', () => {
   // Update configuration status for all configured providers
   async function updateConfigurationStatus() {
     await Promise.all(Object.entries(providerMetadata)
-      // TODO: ignore un-configured provider
-      // .filter(([_, provider]) => provider.configured)
+      .filter(([providerId]) => {
+        // Always validate built-in zero-config providers
+        if (providerId === 'browser-web-speech-api')
+          return true
+
+        // Otherwise only validate if it's configured by user (dirty) or explicitly added
+        return shouldListProvider(providerId)
+      })
       .map(async ([providerId]) => {
         try {
           if (providerRuntimeState.value[providerId]) {
