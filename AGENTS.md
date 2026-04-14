@@ -1,4 +1,4 @@
-# Project AIRI Agent Guide
+# Project Sakura Agent Guide
 
 Concise but detailed reference for contributors working across the `moeru-ai/airi` monorepo. Improve code when you touch it; avoid one-off patterns.
 

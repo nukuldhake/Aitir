@@ -4,13 +4,9 @@
   "version": "0.8.5-beta.3",
   "private": true,
   "packageManager": "pnpm@10.30.3",
-  "description": "LLM powered virtual character",
-  "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
-    "url": "https://github.com/moeru-ai"
-  },
-  "license": "MIT",
+  "description": "Sakura - Virtual AI Companion",
+  "author": "Personal Use",
+  "license": "UNLICENSED",
   "scripts": {
     "postinstall": "npx simple-git-hooks && pnpm run build:packages",
     "dev": "pnpm --parallel -r -F @proj-airi/stage-web -F @proj-airi/server-runtime dev",
