@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Screen } from '@proj-airi/ui'
+import { Screen } from '@proj-sakura/ui'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 
@@ -99,3 +99,4 @@ defineExpose({
     </Live2DCanvas>
   </Screen>
 </template>
+

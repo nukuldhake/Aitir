@@ -1,17 +1,17 @@
 {
-  "name": "@proj-airi/stage-ui-three",
+  "name": "@proj-sakura/stage-ui-three",
   "type": "module",
   "private": true,
-  "description": "A collection of 3D scene components that used by Project AIRI",
+  "description": "A collection of 3D scene components that used by Project SAKURA",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moeru-ai/airi.git",
+    "url": "https://github.com/moeru-ai/SAKURA.git",
     "directory": "packages/stage-ui-three"
   },
   "exports": {
@@ -27,8 +27,8 @@
     "@pixiv/three-vrm": "^3.5.0",
     "@pixiv/three-vrm-animation": "^3.5.0",
     "@pixiv/three-vrm-core": "^3.5.0",
-    "@proj-airi/stage-shared": "workspace:*",
-    "@proj-airi/ui": "workspace:*",
+    "@proj-sakura/stage-shared": "workspace:*",
+    "@proj-sakura/ui": "workspace:*",
     "@tresjs/cientos": "^5.4.0",
     "@tresjs/core": "^5.5.0",
     "@tresjs/post-processing": "^3.4.0",
@@ -47,3 +47,5 @@
     "vue-tsc": "^3.1.8"
   }
 }
+
+

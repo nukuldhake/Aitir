@@ -1,17 +1,17 @@
 {
-  "name": "@proj-airi/ui",
+  "name": "@proj-sakura/ui",
   "type": "module",
   "version": "0.8.5-beta.3",
-  "description": "A collection of UI components that used by Project AIRI",
+  "description": "A collection of UI components that used by Project SAKURA",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moeru-ai/airi.git",
+    "url": "https://github.com/moeru-ai/SAKURA.git",
     "directory": "packages/ui"
   },
   "exports": {
@@ -35,3 +35,5 @@
     "vue-tsc": "^3.1.8"
   }
 }
+
+

@@ -1,12 +1,12 @@
 {
-  "name": "@proj-airi/vite-plugin-warpdrive",
+  "name": "@proj-sakura/vite-plugin-warpdrive",
   "type": "module",
   "version": "0.8.5-beta.3",
   "private": true,
   "description": "Vite plugin to rewrite and upload heavy build assets to remote object storage",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
@@ -38,3 +38,5 @@
     "@moeru/std": "catalog:"
   }
 }
+
+

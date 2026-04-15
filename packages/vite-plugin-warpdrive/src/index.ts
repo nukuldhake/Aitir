@@ -58,7 +58,7 @@ export interface WarpDrivePluginOptions {
 export function WarpDrivePlugin(options: WarpDrivePluginOptions): Plugin {
   const include = options.include ?? []
   const prefix = normalizePrefix(options.prefix ?? 'remote-assets')
-  const pluginName = 'proj-airi-warpdrive'
+  const pluginName = 'proj-SAKURA-warpdrive'
   const shouldDeleteLocalAsset = options.delete !== false
   const shouldCleanRemote = options.clean !== false
   const shouldSkipNotModified = options.skipNotModified !== false
@@ -281,3 +281,4 @@ function getAssetSize(asset: OutputAsset) {
 
   return asset.source?.byteLength ?? 0
 }
+

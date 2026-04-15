@@ -76,15 +76,15 @@ Sakura is built on a foundation of modern web technologies, ensuring performance
 flowchart TD
   Core("Sakura Core")
   Unspeech("unspeech")
-  DBDriver("@proj-airi/drizzle-duckdb-wasm")
+  DBDriver("@proj-sakura/drizzle-duckdb-wasm")
   MemoryDriver("Memory Alaya")
-  DB1("@proj-airi/duckdb-wasm")
-  SVRT("@proj-airi/server-runtime")
+  DB1("@proj-sakura/duckdb-wasm")
+  SVRT("@proj-sakura/server-runtime")
   Memory("Memory")
   STT("STT")
   Stage("Stage")
-  StageUI("@proj-airi/stage-ui")
-  UI("@proj-airi/ui")
+  StageUI("@proj-sakura/stage-ui")
+  UI("@proj-sakura/ui")
 
   subgraph Integrated_Soul
     DB1 --> DBDriver --> MemoryDriver --> Memory --> Core
@@ -116,3 +116,4 @@ flowchart TD
 
 > [!TIP]
 > **Pro Tip:** For the best performance on desktop, use the Tamagotchi stage to leverage native CUDA/Metal acceleration via the candle-powered backend.
+

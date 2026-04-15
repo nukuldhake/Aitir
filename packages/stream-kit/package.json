@@ -1,18 +1,18 @@
 {
-  "name": "@proj-airi/stream-kit",
+  "name": "@proj-sakura/stream-kit",
   "type": "module",
   "version": "0.8.5-beta.3",
   "private": true,
-  "description": "Stream utilities for AIRI (queues, streams)",
+  "description": "Stream utilities for SAKURA (queues, streams)",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moeru-ai/airi.git",
+    "url": "https://github.com/moeru-ai/SAKURA.git",
     "directory": "packages/stream-kit"
   },
   "exports": {
@@ -34,3 +34,5 @@
   },
   "devDependencies": {}
 }
+
+

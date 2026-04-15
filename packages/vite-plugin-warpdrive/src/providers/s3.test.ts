@@ -22,7 +22,8 @@ describe('s3', (test) => {
         publicBaseUrl: env.WARP_DRIVE_PUBLIC_BASE ?? env.S3_ENDPOINT,
       })
 
-      expect(await s3.shouldSkipUpload(join(cwd(), 'packages', 'stage-ui', 'src', 'assets', 'live2d', 'models', 'hiyori_free_zh.zip'), '/proj-airi/stage-web/assets/hiyori_free_zh-D9UJNK98.zip')).toBe(true)
+      expect(await s3.shouldSkipUpload(join(cwd(), 'packages', 'stage-ui', 'src', 'assets', 'live2d', 'models', 'hiyori_free_zh.zip'), '/proj-SAKURA/stage-web/assets/hiyori_free_zh-D9UJNK98.zip')).toBe(true)
     })
   })
 })
+

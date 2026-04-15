@@ -177,7 +177,7 @@ const vrmLipSync = useVRMLipSync(currentAudioSource)
 // For sky box update
 const nprProgramVersion = ref(0)
 // For MToon IBL
-let airiIblProbe: ReturnType<typeof createIblProbeController> | null = null
+let SAKURAIblProbe: ReturnType<typeof createIblProbeController> | null = null
 
 // clean the previous vrm model loaded
 function componentCleanUp() {
@@ -217,8 +217,8 @@ function componentCleanUp() {
     VRMUtils.deepDispose(vrm.value.scene as unknown as Object3D)
   }
   // clear IBL probe
-  airiIblProbe?.dispose()
-  airiIblProbe = null
+  SAKURAIblProbe?.dispose()
+  SAKURAIblProbe = null
 }
 
 // look at mouse
@@ -357,8 +357,8 @@ async function loadModel() {
 
       // refactoring
       // MToon material sky box lightProbe setting
-      if (!airiIblProbe && scene.value)
-        airiIblProbe = createIblProbeController(scene.value)
+      if (!SAKURAIblProbe && scene.value)
+        SAKURAIblProbe = createIblProbeController(scene.value)
 
       // Material traverse setting
       _vrm.scene.traverse((child) => {
@@ -539,7 +539,7 @@ onMounted(async () => {
       intensity: skyBoxIntensity.value,
       sh: nprIrrSH.value ?? null,
     })
-    airiIblProbe?.update(mode, skyBoxIntensity.value, nprIrrSH.value ?? null)
+    SAKURAIblProbe?.update(mode, skyBoxIntensity.value, nprIrrSH.value ?? null)
   }, { immediate: true })
   // update eye tracking mode
   watch(trackingMode, (newMode) => {
@@ -601,3 +601,4 @@ defineExpose({
 <template>
   <slot v-if="modelLoaded" />
 </template>
+

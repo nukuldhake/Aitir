@@ -13,8 +13,8 @@ import 'uno.css'
 import '@unocss/reset/tailwind.css'
 import './styles/main.css'
 // Fonts
-import '@proj-airi/font-cjkfonts-allseto/index.css'
-import '@proj-airi/font-xiaolai/index.css'
+import '@proj-sakura/font-cjkfonts-allseto/index.css'
+import '@proj-sakura/font-xiaolai/index.css'
 import '@fontsource-variable/dm-sans'
 import '@fontsource-variable/jura'
 import '@fontsource-variable/quicksand'
@@ -35,3 +35,4 @@ export const setupVue3 = defineSetupVue3(({ app }) => {
   app.component('ThemeColorsHueControl', ThemeColorsHueControl)
   app.component('CharacterCardColorControls', CharacterCardColorControls)
 })
+

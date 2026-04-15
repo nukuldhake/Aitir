@@ -41,7 +41,7 @@
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@iconify/utils": "^3.1.0",
     "@moeru/eslint-config": "catalog:",
-    "@proj-sakura/unocss-preset-chromatic": "^1.0.2",
+    "@proj-airi/unocss-preset-chromatic": "^1.0.2",
     "@types/node": "^24.10.14",
     "@unocss/eslint-config": "^66.6.2",
     "@unocss/eslint-plugin": "^66.6.2",
@@ -91,3 +91,4 @@
     "*": "moeru-lint --fix"
   }
 }
+

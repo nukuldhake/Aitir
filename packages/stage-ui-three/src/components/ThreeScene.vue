@@ -13,7 +13,7 @@ import type { DirectionalLight, SphericalHarmonics3, Texture, WebGLRenderer, Web
 
 import type { Vec3 } from '../stores/model-store'
 
-import { Screen } from '@proj-airi/ui'
+import { Screen } from '@proj-sakura/ui'
 import { TresCanvas } from '@tresjs/core'
 import { EffectComposerPmndrs, HueSaturationPmndrs } from '@tresjs/post-processing'
 import { useElementBounding } from '@vueuse/core'
@@ -409,3 +409,4 @@ defineExpose({
     </div>
   </Screen>
 </template>
+

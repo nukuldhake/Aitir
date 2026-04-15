@@ -395,52 +395,52 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.14
-      '@proj-airi/audio':
+      '@proj-sakura/audio':
         specifier: workspace:^
         version: link:../../packages/audio
-      '@proj-airi/ccc':
+      '@proj-sakura/ccc':
         specifier: workspace:^
         version: link:../../packages/ccc
-      '@proj-airi/electron-eventa':
+      '@proj-sakura/electron-eventa':
         specifier: workspace:^
         version: link:../../packages/electron-eventa
-      '@proj-airi/electron-vueuse':
+      '@proj-sakura/electron-vueuse':
         specifier: workspace:^
         version: link:../../packages/electron-vueuse
-      '@proj-airi/font-cjkfonts-allseto':
+      '@proj-sakura/font-cjkfonts-allseto':
         specifier: workspace:^
         version: link:../../packages/font-cjkfonts-allseto
-      '@proj-airi/font-xiaolai':
+      '@proj-sakura/font-xiaolai':
         specifier: workspace:^
         version: link:../../packages/font-xiaolai
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
-      '@proj-airi/plugin-sdk':
+      '@proj-sakura/plugin-sdk':
         specifier: workspace:^
         version: link:../../packages/plugin-sdk
-      '@proj-airi/server-runtime':
+      '@proj-sakura/server-runtime':
         specifier: workspace:^
         version: link:../../packages/server-runtime
-      '@proj-airi/server-sdk':
+      '@proj-sakura/server-sdk':
         specifier: workspace:*
         version: link:../../packages/server-sdk
-      '@proj-airi/stage-layouts':
+      '@proj-sakura/stage-layouts':
         specifier: workspace:^
         version: link:../../packages/stage-layouts
-      '@proj-airi/stage-pages':
+      '@proj-sakura/stage-pages':
         specifier: workspace:^
         version: link:../../packages/stage-pages
-      '@proj-airi/stage-ui':
+      '@proj-sakura/stage-ui':
         specifier: workspace:^
         version: link:../../packages/stage-ui
-      '@proj-airi/stage-ui-live2d':
+      '@proj-sakura/stage-ui-live2d':
         specifier: workspace:^
         version: link:../../packages/stage-ui-live2d
-      '@proj-airi/stage-ui-three':
+      '@proj-sakura/stage-ui-three':
         specifier: workspace:^
         version: link:../../packages/stage-ui-three
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:^
         version: link:../../packages/ui
       '@tresjs/cientos':
@@ -669,18 +669,18 @@ importers:
       '@proj-airi/lobe-icons':
         specifier: ^1.0.18
         version: 1.0.18
-      '@proj-airi/stage-shared':
-        specifier: workspace:^
-        version: link:../../packages/stage-shared
-      '@proj-airi/ui-transitions':
-        specifier: workspace:^
-        version: link:../../packages/ui-transitions
       '@proj-airi/unplugin-fetch':
         specifier: 'catalog:'
         version: 0.2.2(vite@8.0.0-beta.15(@types/node@24.10.14)(esbuild@0.27.2)(jiti@2.6.1)(less@4.5.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       '@proj-airi/unplugin-live2d-sdk':
         specifier: ^0.1.6
         version: 0.1.6(@types/node@24.10.14)(jiti@2.6.1)(less@4.5.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+      '@proj-sakura/stage-shared':
+        specifier: workspace:^
+        version: link:../../packages/stage-shared
+      '@proj-sakura/ui-transitions':
+        specifier: workspace:^
+        version: link:../../packages/ui-transitions
       '@shikijs/markdown-it':
         specifier: ^3.23.0
         version: 3.23.0
@@ -789,52 +789,52 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.14
-      '@proj-airi/audio':
+      '@proj-sakura/audio':
         specifier: workspace:^
         version: link:../../packages/audio
-      '@proj-airi/ccc':
+      '@proj-sakura/ccc':
         specifier: workspace:^
         version: link:../../packages/ccc
-      '@proj-airi/font-cjkfonts-allseto':
+      '@proj-sakura/font-cjkfonts-allseto':
         specifier: workspace:^
         version: link:../../packages/font-cjkfonts-allseto
-      '@proj-airi/font-xiaolai':
+      '@proj-sakura/font-xiaolai':
         specifier: workspace:^
         version: link:../../packages/font-xiaolai
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:^
         version: link:../../packages/i18n
-      '@proj-airi/model-driver-mediapipe':
+      '@proj-sakura/model-driver-mediapipe':
         specifier: workspace:^
         version: link:../../packages/model-driver-mediapipe
-      '@proj-airi/pipelines-audio':
+      '@proj-sakura/pipelines-audio':
         specifier: workspace:^
         version: link:../../packages/pipelines-audio
-      '@proj-airi/server-sdk':
+      '@proj-sakura/server-sdk':
         specifier: workspace:^
         version: link:../../packages/server-sdk
-      '@proj-airi/stage-layouts':
+      '@proj-sakura/stage-layouts':
         specifier: workspace:^
         version: link:../../packages/stage-layouts
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:^
         version: link:../../packages/stage-shared
-      '@proj-airi/stage-ui':
+      '@proj-sakura/stage-ui':
         specifier: workspace:^
         version: link:../../packages/stage-ui
-      '@proj-airi/stage-ui-three':
+      '@proj-sakura/stage-ui-three':
         specifier: workspace:^
         version: link:../../packages/stage-ui-three
-      '@proj-airi/stage-ui-three-performance-runtime':
+      '@proj-sakura/stage-ui-three-performance-runtime':
         specifier: workspace:^
         version: link:../../packages/stage-ui-three-performance-runtime
-      '@proj-airi/stream-kit':
+      '@proj-sakura/stream-kit':
         specifier: workspace:^
         version: link:../../packages/stream-kit
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:^
         version: link:../../packages/ui
-      '@proj-airi/ui-transitions':
+      '@proj-sakura/ui-transitions':
         specifier: workspace:^
         version: link:../../packages/ui-transitions
       '@tresjs/cientos':
@@ -1051,7 +1051,7 @@ importers:
       '@proj-airi/unplugin-live2d-sdk':
         specifier: ^0.1.6
         version: 0.1.6(@types/node@24.10.14)(jiti@2.6.1)(less@4.5.1)(lightningcss@1.31.1)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
-      '@proj-airi/vite-plugin-warpdrive':
+      '@proj-sakura/vite-plugin-warpdrive':
         specifier: workspace:*
         version: link:../../packages/vite-plugin-warpdrive
       '@shikijs/markdown-it':
@@ -1150,7 +1150,7 @@ importers:
       '@proj-airi/chromatic':
         specifier: ^1.0.2
         version: 1.0.2
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:^
         version: link:../packages/i18n
       '@vueuse/core':
@@ -1211,7 +1211,7 @@ importers:
       '@napi-rs/image':
         specifier: ^1.12.0
         version: 1.12.0
-      '@proj-airi/stage-ui':
+      '@proj-sakura/stage-ui':
         specifier: workspace:^
         version: link:../packages/stage-ui
       '@radix-ui/colors':
@@ -1312,7 +1312,7 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.14
-      '@proj-airi/stream-kit':
+      '@proj-sakura/stream-kit':
         specifier: workspace:^
         version: link:../stream-kit
       clustr:
@@ -1355,7 +1355,7 @@ importers:
         specifier: '>=3'
         version: 3.5.29(typescript@5.9.3)
     devDependencies:
-      '@proj-airi/electron-eventa':
+      '@proj-sakura/electron-eventa':
         specifier: workspace:^
         version: link:../electron-eventa
 
@@ -1429,10 +1429,10 @@ importers:
       '@moeru/eventa':
         specifier: 'catalog:'
         version: 1.0.0-alpha.14(electron@40.6.1)
-      '@proj-airi/plugin-protocol':
+      '@proj-sakura/plugin-protocol':
         specifier: workspace:*
         version: link:../plugin-protocol
-      '@proj-airi/server-shared':
+      '@proj-sakura/server-shared':
         specifier: workspace:*
         version: link:../server-shared
       valibot:
@@ -1447,7 +1447,7 @@ importers:
       '@guiiai/logg':
         specifier: 'catalog:'
         version: 1.2.11
-      '@proj-airi/server-shared':
+      '@proj-sakura/server-shared':
         specifier: workspace:^
         version: link:../server-shared
       crossws:
@@ -1471,7 +1471,7 @@ importers:
 
   packages/server-sdk:
     dependencies:
-      '@proj-airi/server-shared':
+      '@proj-sakura/server-shared':
         specifier: workspace:^
         version: link:../server-shared
       crossws:
@@ -1487,7 +1487,7 @@ importers:
 
   packages/server-shared:
     dependencies:
-      '@proj-airi/plugin-protocol':
+      '@proj-sakura/plugin-protocol':
         specifier: workspace:*
         version: link:../plugin-protocol
 
@@ -1499,22 +1499,22 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.14
-      '@proj-airi/ccc':
+      '@proj-sakura/ccc':
         specifier: workspace:*
         version: link:../ccc
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:*
         version: link:../i18n
-      '@proj-airi/server-sdk':
+      '@proj-sakura/server-sdk':
         specifier: workspace:*
         version: link:../server-sdk
-      '@proj-airi/stage-ui':
+      '@proj-sakura/stage-ui':
         specifier: workspace:*
         version: link:../stage-ui
-      '@proj-airi/stage-ui-three':
+      '@proj-sakura/stage-ui-three':
         specifier: workspace:*
         version: link:../stage-ui-three
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:*
         version: link:../ui
       '@vueuse/core':
@@ -1575,7 +1575,7 @@ importers:
       '@nekopaw/tempora':
         specifier: 'catalog:'
         version: 0.4.0-alpha.1
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:^
         version: link:../stage-shared
       '@types/audioworklet':
@@ -1599,25 +1599,25 @@ importers:
       '@moeru/std':
         specifier: 'catalog:'
         version: 0.1.0-beta.14
-      '@proj-airi/ccc':
+      '@proj-sakura/ccc':
         specifier: workspace:*
         version: link:../ccc
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:*
         version: link:../i18n
-      '@proj-airi/server-sdk':
+      '@proj-sakura/server-sdk':
         specifier: workspace:*
         version: link:../server-sdk
-      '@proj-airi/stage-ui':
+      '@proj-sakura/stage-ui':
         specifier: workspace:*
         version: link:../stage-ui
-      '@proj-airi/stage-ui-live2d':
+      '@proj-sakura/stage-ui-live2d':
         specifier: workspace:*
         version: link:../stage-ui-live2d
-      '@proj-airi/stage-ui-three':
+      '@proj-sakura/stage-ui-three':
         specifier: workspace:*
         version: link:../stage-ui-three
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:*
         version: link:../ui
       '@shopify/draggable':
@@ -1687,7 +1687,7 @@ importers:
       '@nekopaw/tempora':
         specifier: 'catalog:'
         version: 0.4.0-alpha.1
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:^
         version: link:../stage-shared
       '@types/audioworklet':
@@ -1745,46 +1745,46 @@ importers:
       '@moeru/eventa':
         specifier: ^1.0.0-beta.1
         version: 1.0.0-beta.1(electron@40.6.1)(h3@2.0.1-rc.5(crossws@0.4.4(srvx@0.11.8)))
-      '@proj-airi/audio':
-        specifier: workspace:^
-        version: link:../audio
-      '@proj-airi/ccc':
-        specifier: workspace:^
-        version: link:../ccc
       '@proj-airi/chromatic':
         specifier: ^1.0.2
         version: 1.0.2
-      '@proj-airi/core-character':
+      '@proj-sakura/audio':
+        specifier: workspace:^
+        version: link:../audio
+      '@proj-sakura/ccc':
+        specifier: workspace:^
+        version: link:../ccc
+      '@proj-sakura/core-character':
         specifier: workspace:^
         version: link:../core-character
-      '@proj-airi/font-cjkfonts-allseto':
+      '@proj-sakura/font-cjkfonts-allseto':
         specifier: workspace:^
         version: link:../font-cjkfonts-allseto
-      '@proj-airi/font-xiaolai':
+      '@proj-sakura/font-xiaolai':
         specifier: workspace:^
         version: link:../font-xiaolai
-      '@proj-airi/i18n':
+      '@proj-sakura/i18n':
         specifier: workspace:^
         version: link:../i18n
-      '@proj-airi/model-driver-lipsync':
+      '@proj-sakura/model-driver-lipsync':
         specifier: workspace:^
         version: link:../model-driver-lipsync
-      '@proj-airi/pipelines-audio':
+      '@proj-sakura/pipelines-audio':
         specifier: workspace:^
         version: link:../pipelines-audio
-      '@proj-airi/server-sdk':
+      '@proj-sakura/server-sdk':
         specifier: workspace:^
         version: link:../server-sdk
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:^
         version: link:../stage-shared
-      '@proj-airi/stage-ui-live2d':
+      '@proj-sakura/stage-ui-live2d':
         specifier: workspace:^
         version: link:../stage-ui-live2d
-      '@proj-airi/stage-ui-three':
+      '@proj-sakura/stage-ui-three':
         specifier: workspace:^
         version: link:../stage-ui-three
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:^
         version: link:../ui
       '@ricky0123/vad-web':
@@ -2037,10 +2037,10 @@ importers:
       '@proj-airi/lobe-icons':
         specifier: ^1.0.18
         version: 1.0.18
-      '@proj-airi/stream-kit':
+      '@proj-sakura/stream-kit':
         specifier: workspace:*
         version: link:../stream-kit
-      '@proj-airi/vite-plugin-warpdrive':
+      '@proj-sakura/vite-plugin-warpdrive':
         specifier: workspace:*
         version: link:../vite-plugin-warpdrive
       '@types/audioworklet':
@@ -2139,10 +2139,10 @@ importers:
       '@pixi/utils':
         specifier: ^6.5.10
         version: 6.5.10(@pixi/constants@6.5.10)(@pixi/settings@6.5.10(@pixi/constants@6.5.10))
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:^
         version: link:../stage-shared
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:^
         version: link:../ui
       '@vueuse/core':
@@ -2194,10 +2194,10 @@ importers:
       '@pixiv/three-vrm-core':
         specifier: ^3.5.0
         version: 3.5.0(three@0.183.1)
-      '@proj-airi/stage-shared':
+      '@proj-sakura/stage-shared':
         specifier: workspace:*
         version: link:../stage-shared
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:*
         version: link:../ui
       '@tresjs/cientos':
@@ -2292,7 +2292,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.29(typescript@5.9.3)
     devDependencies:
-      '@proj-airi/ui':
+      '@proj-sakura/ui':
         specifier: workspace:^
         version: link:../ui
       '@unocss/reset':
@@ -2353,10 +2353,10 @@ importers:
 
   packages/unocss-preset-fonts:
     dependencies:
-      '@proj-airi/font-cjkfonts-allseto':
+      '@proj-sakura/font-cjkfonts-allseto':
         specifier: workspace:^
         version: link:../font-cjkfonts-allseto
-      '@proj-airi/font-xiaolai':
+      '@proj-sakura/font-xiaolai':
         specifier: workspace:^
         version: link:../font-xiaolai
       '@unocss/core':

@@ -1,17 +1,17 @@
 {
-  "name": "@proj-airi/ui-loading-screens",
+  "name": "@proj-sakura/ui-loading-screens",
   "type": "module",
   "private": true,
-  "description": "A collection of loading screens that used by Project AIRI",
+  "description": "A collection of loading screens that used by Project SAKURA",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moeru-ai/airi.git",
+    "url": "https://github.com/moeru-ai/SAKURA.git",
     "directory": "packages/ui-loading-screens"
   },
   "exports": {
@@ -33,7 +33,7 @@
     "vue": "catalog:"
   },
   "devDependencies": {
-    "@proj-airi/ui": "workspace:^",
+    "@proj-sakura/ui": "workspace:^",
     "@unocss/reset": "^66.6.2",
     "@vitejs/plugin-vue": "^6.0.4",
     "unplugin-vue-router": "^0.19.2",
@@ -43,3 +43,5 @@
     "vue-tsc": "^3.1.8"
   }
 }
+
+

@@ -3,7 +3,7 @@ import type { Application } from '@pixi/app'
 
 import type { PixiLive2DInternalModel } from '../../../composables/live2d'
 
-import { useTheme } from '@proj-airi/ui'
+import { useTheme } from '@proj-sakura/ui'
 import { breakpointsTailwind, until, useBreakpoints, useDebounceFn } from '@vueuse/core'
 import { formatHex } from 'culori'
 import { Mutex } from 'es-toolkit'
@@ -671,3 +671,4 @@ import.meta.hot?.dispose(() => {
   <div ref="dropShadowColorComputer" hidden bg="primary-400 dark:primary-500" />
   <slot />
 </template>
+

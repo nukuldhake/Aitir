@@ -1,17 +1,17 @@
 {
-  "name": "@proj-airi/stage-ui-three-performance-runtime",
+  "name": "@proj-sakura/stage-ui-three-performance-runtime",
   "type": "module",
   "private": true,
   "description": "Runtime timeline + blackboard utilities for stage-ui-three performances",
   "author": {
-    "name": "Moeru AI Project AIRI Team",
-    "email": "airi@moeru.ai",
+    "name": "Moeru AI Project SAKURA Team",
+    "email": "SAKURA@moeru.ai",
     "url": "https://github.com/moeru-ai"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moeru-ai/airi.git",
+    "url": "https://github.com/moeru-ai/SAKURA.git",
     "directory": "packages/stage-ui-three-performance-runtime"
   },
   "exports": {
@@ -25,3 +25,5 @@
     "vue": "catalog:"
   }
 }
+
+

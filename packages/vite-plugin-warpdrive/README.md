@@ -1,4 +1,4 @@
-# @proj-airi/vite-plugin-warpdrive
+# @proj-sakura/vite-plugin-warpdrive
 
 Vite plugin that rewrites selected build assets (large WASM/TTF/VRM, etc.) to remote object storage and uploads them after build. It uses Vite's `renderBuiltUrl` hook so the generated bundles reference the remote URL while keeping the local file for upload.
 
@@ -11,13 +11,13 @@ Vite plugin that rewrites selected build assets (large WASM/TTF/VRM, etc.) to re
 ## Install
 
 ```bash
-pnpm add -D @proj-airi/vite-plugin-warpdrive
+pnpm add -D @proj-sakura/vite-plugin-warpdrive
 ```
 
 ## Usage
 
 ```ts
-import { createS3Provider, WarpDrivePlugin } from '@proj-airi/vite-plugin-warpdrive'
+import { createS3Provider, WarpDrivePlugin } from '@proj-sakura/vite-plugin-warpdrive'
 // vite.config.ts
 import { defineConfig } from 'vite'
 
@@ -82,3 +82,4 @@ Light wrapper around `s3mini`. Required fields:
 1. `renderBuiltUrl` returns the remote URL for matching assets while remembering the key/hostId/hostType.
 2. `generateBundle` records assets to upload, emits the optional manifest, and leaves the local files in `dist/`.
 3. `closeBundle` optionally cleans the prefix, skips unmodified uploads when supported, uploads assets, and deletes local copies (unless `delete` is false).
+

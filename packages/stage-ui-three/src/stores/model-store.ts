@@ -60,7 +60,7 @@ interface BroadcastChannelEventShouldUpdateView {
 }
 
 export const useModelStore = defineStore('modelStore', () => {
-  const { post, data } = useBroadcastChannel<BroadcastChannelEvents, BroadcastChannelEvents>({ name: 'airi-stores-live2d' })
+  const { post, data } = useBroadcastChannel<BroadcastChannelEvents, BroadcastChannelEvents>({ name: 'SAKURA-stores-live2d' })
   const shouldUpdateViewHooks = ref(new Set<() => void>())
 
   const onShouldUpdateView = (hook: () => void) => {
@@ -183,3 +183,4 @@ export const useModelStore = defineStore('modelStore', () => {
     resetModelStore,
   }
 })
+
