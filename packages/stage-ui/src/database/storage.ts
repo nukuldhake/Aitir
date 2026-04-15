@@ -7,5 +7,5 @@ export const storage = createStorage({
   driver: memoryDriver(),
 })
 
-storage.mount('local', indexedDbDriver({ base: 'airi-local' }))
-storage.mount('outbox', indexedDbDriver({ base: 'airi-sync-queue' }))
+storage.mount('local', indexedDbDriver({ base: 'SAKURA-local' }))
+storage.mount('outbox', indexedDbDriver({ base: 'SAKURA-sync-queue' }))

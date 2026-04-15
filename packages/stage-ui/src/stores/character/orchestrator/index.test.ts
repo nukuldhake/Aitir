@@ -1,14 +1,14 @@
 /* eslint-disable style/indent-binary-ops */
 /* eslint-disable style/operator-linebreak */
 
-import type { WebSocketEventOf } from '@proj-airi/server-sdk'
+import type { WebSocketEventOf } from '@proj-sakura/server-sdk'
 import type { Store, StoreDefinition } from 'pinia'
 import type { Mock } from 'vitest'
 import type { UnwrapRef } from 'vue'
 import type z from 'zod'
 
 import type { StreamEvent } from '../../llm'
-import type { AiriCard } from '../../modules'
+import type { SAKURACard } from '../../modules'
 
 import { createTestingPinia } from '@pinia/testing'
 import { tool } from '@xsai/tool'
@@ -19,7 +19,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { sparkCommandSchema, useCharacterOrchestratorStore } from '.'
 import { useCharacterStore } from '..'
 import { useLLM } from '../../llm'
-import { useAiriCardStore, useConsciousnessStore } from '../../modules'
+import { useConsciousnessStore, useSAKURACardStore } from '../../modules'
 import { useProvidersStore } from '../../providers'
 
 vi.mock('vue-i18n', () => ({
@@ -114,15 +114,15 @@ describe('store character-orchestrator', () => {
     consciousnessStore.activeProvider = 'mock-provider'
     consciousnessStore.activeModel = 'mock-model'
 
-    const airiCardStore = useAiriCardStore(pinia)
+    const SAKURACardStore = useSAKURACardStore(pinia)
     // @ts-expect-error - testing purpose
-    airiCardStore.systemPrompt = 'You are a brave adventurer in Minecraft.'
+    SAKURACardStore.systemPrompt = 'You are a brave adventurer in Minecraft.'
     // @ts-expect-error - testing purpose
-    airiCardStore.activeCard = {
+    SAKURACardStore.activeCard = {
       name: 'Hero',
       version: '1.0',
       extensions: {
-        airi: {
+        SAKURA: {
           agents: {},
           modules: {
             consciousness: {
@@ -137,7 +137,7 @@ describe('store character-orchestrator', () => {
           },
         },
       },
-    } satisfies AiriCard
+    } satisfies SAKURACard
   })
 
   it('handles immediate spark:notify with reaction and commands', async () => {

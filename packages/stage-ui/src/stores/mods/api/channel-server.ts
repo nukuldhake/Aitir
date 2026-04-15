@@ -1,7 +1,7 @@
-import type { ContextUpdate, WebSocketBaseEvent, WebSocketEvent, WebSocketEventOptionalSource, WebSocketEvents } from '@proj-airi/server-sdk'
+import type { ContextUpdate, WebSocketBaseEvent, WebSocketEvent, WebSocketEventOptionalSource, WebSocketEvents } from '@proj-sakura/server-sdk'
 
-import { Client, WebSocketEventSource } from '@proj-airi/server-sdk'
-import { isStageTamagotchi, isStageWeb } from '@proj-airi/stage-shared'
+import { Client, WebSocketEventSource } from '@proj-sakura/server-sdk'
+import { isStageTamagotchi, isStageWeb } from '@proj-sakura/stage-shared'
 import { useLocalStorage } from '@vueuse/core'
 import { nanoid } from 'nanoid'
 import { defineStore } from 'pinia'
@@ -9,7 +9,7 @@ import { ref, watch } from 'vue'
 
 import { useWebSocketInspectorStore } from '../../devtools/websocket-inspector'
 
-export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:server', () => {
+export const useModsServerChannelStore = defineStore('mods:channels:proj-SAKURA:server', () => {
   const connected = ref(false)
   const client = ref<Client>()
   const initializing = ref<Promise<void> | null>(null)
@@ -17,7 +17,7 @@ export const useModsServerChannelStore = defineStore('mods:channels:proj-airi:se
   const listenersInitialized = ref(false)
   const listenerDisposers = ref<Array<() => void>>([])
 
-  const defaultWebSocketUrl = import.meta.env.VITE_AIRI_WS_URL || ''
+  const defaultWebSocketUrl = import.meta.env.VITE_SAKURA_WS_URL || ''
   const websocketUrl = useLocalStorage('settings/connection/websocket-url', defaultWebSocketUrl)
   const websocketEnabled = useLocalStorage('settings/connection/websocket-enabled', false)
 

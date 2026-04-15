@@ -1,15 +1,15 @@
 import type { ChatSessionsExport } from '../types/chat-session'
 
-import { isStageTamagotchi } from '@proj-airi/stage-shared'
-import { useLive2d } from '@proj-airi/stage-ui-live2d'
+import { isStageTamagotchi } from '@proj-sakura/stage-shared'
+import { useLive2d } from '@proj-sakura/stage-ui-live2d'
 
 import { useChatOrchestratorStore } from '../stores/chat'
 import { useChatSessionStore } from '../stores/chat/session-store'
 import { useDisplayModelsStore } from '../stores/display-models'
 import { useMcpStore } from '../stores/mcp'
-import { useAiriCardStore } from '../stores/modules/airi-card'
 import { useConsciousnessStore } from '../stores/modules/consciousness'
 import { useHearingStore } from '../stores/modules/hearing'
+import { useSAKURACardStore } from '../stores/modules/SAKURA-card'
 import { useSpeechStore } from '../stores/modules/speech'
 import { useOnboardingStore } from '../stores/onboarding'
 import { useProvidersStore } from '../stores/providers'
@@ -28,7 +28,7 @@ export function useDataMaintenance() {
   const consciousnessStore = useConsciousnessStore()
   const mcpStore = useMcpStore()
   const onboardingStore = useOnboardingStore()
-  const airiCardStore = useAiriCardStore()
+  const SAKURACardStore = useSAKURACardStore()
 
   async function deleteAllModels() {
     await displayModelsStore.resetDisplayModels()
@@ -74,7 +74,7 @@ export function useDataMaintenance() {
     live2dStore.resetState()
     mcpStore.resetState()
     onboardingStore.resetSetupState()
-    airiCardStore.resetState()
+    SAKURACardStore.resetState()
   }
 
   async function deleteAllData() {

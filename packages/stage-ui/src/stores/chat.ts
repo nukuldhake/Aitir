@@ -1,11 +1,11 @@
-import type { WebSocketEventInputs } from '@proj-airi/server-sdk'
+import type { WebSocketEventInputs } from '@proj-sakura/server-sdk'
 import type { ChatProvider } from '@xsai-ext/providers/utils'
 import type { CommonContentPart, Message, ToolMessage } from '@xsai/shared-chat'
 
 import type { ChatAssistantMessage, ChatSlices, ChatStreamEventContext, StreamingAssistantMessage } from '../types/chat'
 import type { StreamEvent, StreamOptions } from './llm'
 
-import { createQueue } from '@proj-airi/stream-kit'
+import { createQueue } from '@proj-sakura/stream-kit'
 import { nanoid } from 'nanoid'
 import { defineStore, storeToRefs } from 'pinia'
 import { ref, toRaw } from 'vue'
@@ -40,7 +40,6 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
   // Most ACT metadata payloads are under 200 characters.
   const MAX_BUFFER = 300
 
-
   let speechStarted = false
   // Buffer for accumulating partial inline JSON across chunk boundaries
   let inlineBuffer = ''
@@ -58,7 +57,7 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
       cleaned = cleaned.replace(/^(?:<\|)?ACT(?:\s*JSON)?\s*:\s*/i, '')
 
       // 2. Strip leading formatting artifacts that models sometimes hallucinate after metadata
-      // This includes things like stand-alone symbols (?, !, *, >), bullet points, or "AIRI:" labels
+      // This includes things like stand-alone symbols (?, !, *, >), bullet points, or "SAKURA:" labels
       cleaned = cleaned.replace(/^\s*[?!=*#>-]+\s*/, '')
 
       // 3. Strip leading parenthetical or bracketed metadata: (Emotion), [Action]
@@ -126,7 +125,7 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
      */
     feed(chunk: string): string {
       // Once metadata has been stripped, still scan for inline JSON metadata
-      // that the AI may embed mid-sentence (e.g., `I'm Airi! {"emotion":...} I'm a...`)
+      // that the AI may embed mid-sentence (e.g., `I'm SAKURA! {"emotion":...} I'm a...`)
       if (metadataStripped) {
         return cleanupSpeech(chunk, false)
       }
@@ -148,15 +147,15 @@ function createActMetadataFilter(onMetadata?: (metadata: string) => void) {
       const isLikelyMetadata = ACT_METADATA_KEYWORDS.some(kw =>
         lowerTrimmed.startsWith(kw) || kw.startsWith(lowerTrimmed) || lowerTrimmed.startsWith(`"${kw}`) || `"${kw}`.startsWith(lowerTrimmed) || (lowerTrimmed.includes(`${kw}:`) && lowerTrimmed.indexOf(`${kw}:`) < 10),
       )
-        || firstChar === '{'
-        || trimmed.startsWith('ACT:')
-        || trimmed.startsWith('<|ACT')
-        || firstChar === '<' // <action>
-        || firstChar === '/' // /action>
-        || firstChar === '\\' // \action>
-        || firstChar === '$' // $action>
-        || firstChar === '*' // *action*
-        || firstChar === '|' // | emotion |
+      || firstChar === '{'
+      || trimmed.startsWith('ACT:')
+      || trimmed.startsWith('<|ACT')
+      || firstChar === '<' // <action>
+      || firstChar === '/' // /action>
+      || firstChar === '\\' // \action>
+      || firstChar === '$' // $action>
+      || firstChar === '*' // *action*
+      || firstChar === '|' // | emotion |
 
       if (!isLikelyMetadata) {
         // No metadata at all, release everything

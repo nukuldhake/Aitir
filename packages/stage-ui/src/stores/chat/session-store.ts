@@ -9,11 +9,11 @@ import { client } from '../../composables/api'
 import { useLocalFirstRequest } from '../../composables/use-local-first'
 import { chatSessionsRepo } from '../../database/repos/chat-sessions.repo'
 import { useAuthStore } from '../auth'
-import { useAiriCardStore } from '../modules/airi-card'
+import { useSAKURACardStore } from '../modules/SAKURA-card'
 
 export const useChatSessionStore = defineStore('chat-session', () => {
   const { userId, isAuthenticated } = storeToRefs(useAuthStore())
-  const { activeCardId, systemPrompt } = storeToRefs(useAiriCardStore())
+  const { activeCardId, systemPrompt } = storeToRefs(useSAKURACardStore())
 
   const activeSessionId = ref<string>('')
   const sessionMessages = ref<Record<string, ChatHistoryItem[]>>({})

@@ -1,6 +1,6 @@
-import type { TraceEvent } from '@proj-airi/stage-shared'
+import type { TraceEvent } from '@proj-sakura/stage-shared'
 
-import { defaultPerfTracer } from '@proj-airi/stage-shared'
+import { defaultPerfTracer } from '@proj-sakura/stage-shared'
 import { useBroadcastChannel } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { watch } from 'vue'
@@ -29,7 +29,7 @@ interface PerfTracerMessageEvent {
 
 type PerfTracerMessage = PerfTracerMessageEnable | PerfTracerMessageDisable | PerfTracerMessageEvent
 
-const PERF_TRACER_CHANNEL = 'airi-perf-tracer'
+const PERF_TRACER_CHANNEL = 'SAKURA-perf-tracer'
 const RELAY_META_KEY = '__perfTracerRelayedFrom'
 const BRIDGE_TOKEN = 'perf-bridge'
 

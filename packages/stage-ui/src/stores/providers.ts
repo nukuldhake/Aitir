@@ -20,7 +20,7 @@ import type {
 
 import type { AliyunRealtimeSpeechExtraOptions } from './providers/aliyun/stream-transcription'
 
-import { isStageTamagotchi, isUrl } from '@proj-airi/stage-shared'
+import { isStageTamagotchi, isUrl } from '@proj-sakura/stage-shared'
 import { computedAsync, useLocalStorage } from '@vueuse/core'
 import {
   createOpenAI,
@@ -254,7 +254,7 @@ export const useProvidersStore = defineStore('providers', () => {
           if (!config.baseUrl) {
             return {
               errors: [new Error('Base URL is required.')],
-              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/airi/issues.',
+              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/SAKURA/issues.',
               valid: false,
             }
           }
@@ -284,7 +284,7 @@ export const useProvidersStore = defineStore('providers', () => {
           if (!config.baseUrl) {
             return {
               errors: [new Error('Base URL is required.')],
-              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/airi/issues.',
+              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/SAKURA/issues.',
               valid: false,
             }
           }
@@ -314,7 +314,7 @@ export const useProvidersStore = defineStore('providers', () => {
           if (!config.baseUrl) {
             return {
               errors: [new Error('Base URL is required.')],
-              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/airi/issues.',
+              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/SAKURA/issues.',
               valid: false,
             }
           }
@@ -344,7 +344,7 @@ export const useProvidersStore = defineStore('providers', () => {
           if (!config.baseUrl) {
             return {
               errors: [new Error('Base URL is required.')],
-              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/airi/issues.',
+              reason: 'Base URL is required. This is likely a bug, report to developers on https://github.com/moeru-ai/SAKURA/issues.',
               valid: false,
             }
           }
@@ -1025,7 +1025,7 @@ export const useProvidersStore = defineStore('providers', () => {
               let voiceId = body.voice
 
               let realProvider = 'elevenlabs'
-              
+
               // 1. AUTO-CLEAN: Remove 'azure-' or 'openai-' prefixes
               if (voiceId.startsWith('azure-')) {
                 realProvider = 'azure'
@@ -1073,7 +1073,7 @@ export const useProvidersStore = defineStore('providers', () => {
             { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel (Energetic)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
             { id: 'pFZP5JQG7iQjIQuC4Bku', name: 'Lily (Anime/Cute)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
             { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella (Soft/Cute)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
-            
+
             // OpenAI (Verified Working)
             { id: 'openai-nova', name: 'Nova (E-girl/Bubbly)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
             { id: 'openai-shimmer', name: 'Shimmer (Soft/Deep)', provider: 'puter-elevenlabs', gender: 'female', previewURL: '' },
@@ -1584,7 +1584,7 @@ export const useProvidersStore = defineStore('providers', () => {
       defaultOptions: () => ({
         baseUrl: 'http://localhost:4315/v1/',
       }),
-      createProvider: async config => createPlayer2((config.baseUrl as string).trim(), 'airi'),
+      createProvider: async config => createPlayer2((config.baseUrl as string).trim(), 'SAKURA'),
       capabilities: {
         listModels: async () => {
           return [
@@ -1668,7 +1668,7 @@ export const useProvidersStore = defineStore('providers', () => {
             const response = await fetch(`${config.baseUrl as string}health`, {
               method: 'GET',
               headers: {
-                'player2-game-key': 'airi',
+                'player2-game-key': 'SAKURA',
               },
               signal: controller.signal,
             })
@@ -1880,7 +1880,7 @@ export const useProvidersStore = defineStore('providers', () => {
         },
       },
     },
-  };
+  }
 
   // Progressive migration bridge:
   // translate unified provider definitions from libs/providers to legacy store metadata.

@@ -1,9 +1,9 @@
-import type { UseQueueReturn } from '@proj-airi/stream-kit'
+import type { UseQueueReturn } from '@proj-sakura/stream-kit'
 
 import type { EmotionPayload } from '../constants/emotions'
 
 import { sleep } from '@moeru/std'
-import { createQueue } from '@proj-airi/stream-kit'
+import { createQueue } from '@proj-sakura/stream-kit'
 
 import { Emotion, EMOTION_VALUES } from '../constants/emotions'
 

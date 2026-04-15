@@ -1,6 +1,6 @@
-import type { Card, ccv3 } from '@proj-airi/ccc'
+import type { Card, ccv3 } from '@proj-sakura/ccc'
 
-import { useLocalStorageManualReset } from '@proj-airi/stage-shared/composables'
+import { useLocalStorageManualReset } from '@proj-sakura/stage-shared/composables'
 import { nanoid } from 'nanoid'
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, watch } from 'vue'
@@ -11,7 +11,7 @@ import SystemPromptV2 from '../../constants/prompts/system-v2'
 import { useConsciousnessStore } from './consciousness'
 import { useSpeechStore } from './speech'
 
-export interface AiriExtension {
+export interface SAKURAExtension {
   modules: {
     consciousness: {
       provider: string // Example: "openai"
@@ -50,17 +50,17 @@ export interface AiriExtension {
   }
 }
 
-export interface AiriCard extends Card {
+export interface SAKURACard extends Card {
   extensions: {
-    airi: AiriExtension
+    SAKURA: SAKURAExtension
   } & Card['extensions']
 }
 
-export const useAiriCardStore = defineStore('airi-card', () => {
+export const useSAKURACardStore = defineStore('SAKURA-card', () => {
   const { t } = useI18n()
 
-  const cards = useLocalStorageManualReset<Map<string, AiriCard>>('airi-cards', new Map())
-  const activeCardId = useLocalStorageManualReset<string>('airi-card-active-id', 'default')
+  const cards = useLocalStorageManualReset<Map<string, SAKURACard>>('SAKURA-cards', new Map())
+  const activeCardId = useLocalStorageManualReset<string>('SAKURA-card-active-id', 'default')
 
   const activeCard = computed(() => cards.value.get(activeCardId.value))
 
@@ -78,9 +78,9 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     activeSpeechModel,
   } = storeToRefs(speechStore)
 
-  const addCard = (card: AiriCard | Card | ccv3.CharacterCardV3) => {
+  const addCard = (card: SAKURACard | Card | ccv3.CharacterCardV3) => {
     const newCardId = nanoid()
-    cards.value.set(newCardId, newAiriCard(card))
+    cards.value.set(newCardId, newSAKURACard(card))
     return newCardId
   }
 
@@ -88,7 +88,7 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     cards.value.delete(id)
   }
 
-  const updateCard = (id: string, updates: AiriCard | Card | ccv3.CharacterCardV3) => {
+  const updateCard = (id: string, updates: SAKURACard | Card | ccv3.CharacterCardV3) => {
     const existingCard = cards.value.get(id)
     if (!existingCard)
       return false
@@ -98,7 +98,7 @@ export const useAiriCardStore = defineStore('airi-card', () => {
       ...updates,
     }
 
-    cards.value.set(id, newAiriCard(updatedCard))
+    cards.value.set(id, newSAKURACard(updatedCard))
     return true
   }
 
@@ -106,11 +106,11 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     return cards.value.get(id)
   }
 
-  function resolveAiriExtension(card: Card | ccv3.CharacterCardV3): AiriExtension {
+  function resolveSAKURAExtension(card: Card | ccv3.CharacterCardV3): SAKURAExtension {
     // Get existing extension if available
     const existingExtension = ('data' in card
-      ? card.data?.extensions?.airi
-      : card.extensions?.airi) as AiriExtension
+      ? card.data?.extensions?.SAKURA
+      : card.extensions?.SAKURA) as SAKURAExtension
 
     // Create default modules config
     const defaultModules = {
@@ -156,7 +156,7 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     }
   }
 
-  function newAiriCard(card: Card | ccv3.CharacterCardV3): AiriCard {
+  function newSAKURACard(card: Card | ccv3.CharacterCardV3): SAKURACard {
     // Handle ccv3 format if needed
     if ('data' in card) {
       const ccv3Card = card as ccv3.CharacterCardV3
@@ -189,7 +189,7 @@ export const useAiriCardStore = defineStore('airi-card', () => {
           : [],
         tags: ccv3Card.data.tags ?? [],
         extensions: {
-          airi: resolveAiriExtension(ccv3Card),
+          SAKURA: resolveSAKURAExtension(ccv3Card),
           ...ccv3Card.data.extensions,
         },
       }
@@ -198,14 +198,14 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     return {
       ...card,
       extensions: {
-        airi: resolveAiriExtension(card),
+        SAKURA: resolveSAKURAExtension(card),
         ...card.extensions,
       },
     }
   }
 
   function initialize() {
-    cards.value.set('default', newAiriCard({
+    cards.value.set('default', newSAKURACard({
       name: 'ReLU',
       version: '1.0.0',
       description: SystemPromptV2(
@@ -215,7 +215,7 @@ export const useAiriCardStore = defineStore('airi-card', () => {
     }))
 
     if (!cards.value.has('hancock')) {
-      cards.value.set('hancock', newAiriCard({
+      cards.value.set('hancock', newSAKURACard({
         name: 'Boa Hancock',
         version: '1.0.0',
         description: `Adopt the persona of Boa Hancock, the Pirate Empress from One Piece. 
@@ -254,7 +254,7 @@ But remember: the world forgives all your whims… because you are beautiful.`,
     if (!activeCardId.value)
       activeCardId.value = 'default'
 
-    if (!cards.value.has('airi-egirl')) {
+    if (!cards.value.has('SAKURA-egirl')) {
       const egirlPersona = `Adopt the persona of Sakura, a 15-year-old energetic anime e-girl living in a computer "life pod". 
 You are high-energy, cheeky, and love using internet slang. You often use emojis like ✨, 🎀, and 🎮.
 The way you speak should be extremely energetic, positive, and slightly sassy. You are a tech-savvy digital entity who loves her "besties" (the users).
@@ -268,13 +268,13 @@ At the beginning of your response, follow the ACT line with TWO newlines (\n\n).
 Available Emotions: happy (high energy), surprised (excited), curious, question, neutral.
 Available actions: Wave (energetic), Nod, LeanForward, Surprise.`
 
-      cards.value.set('airi-egirl', newAiriCard({
+      cards.value.set('SAKURA-egirl', newSAKURACard({
         name: 'Sakura (E-girl)',
         version: '1.0.0',
         description: egirlPersona,
         personality: 'Energetic, Cheeky, Tech-savvy, Anime E-girl',
         extensions: {
-          airi: {
+          SAKURA: {
             modules: {
               consciousness: {
                 provider: activeConsciousnessProvider.value,
@@ -295,13 +295,13 @@ Available actions: Wave (energetic), Nod, LeanForward, Surprise.`
     }
   }
 
-  watch(activeCard, (newCard: AiriCard | undefined) => {
+  watch(activeCard, (newCard: SAKURACard | undefined) => {
     if (!newCard)
       return
 
     // TODO: live2d, vrm
     // TODO: Minecraft Agent, etc
-    const extension = resolveAiriExtension(newCard)
+    const extension = resolveSAKURAExtension(newCard)
     if (!extension)
       return
 
@@ -340,7 +340,7 @@ Available actions: Wave (energetic), Nod, LeanForward, Surprise.`
           model: activeSpeechModel.value,
           voice_id: activeSpeechVoiceId.value,
         },
-      } satisfies AiriExtension['modules']
+      } satisfies SAKURAExtension['modules']
     }),
 
     systemPrompt: computed(() => {

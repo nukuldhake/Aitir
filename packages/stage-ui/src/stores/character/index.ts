@@ -1,11 +1,11 @@
-import type { IntentHandle } from '@proj-airi/pipelines-audio'
+import type { IntentHandle } from '@proj-sakura/pipelines-audio'
 
 import { nanoid } from 'nanoid'
 import { defineStore, storeToRefs } from 'pinia'
 import { computed, reactive, ref } from 'vue'
 
 import { useLlmmarkerParser } from '../../composables/llm-marker-parser'
-import { useAiriCardStore } from '../modules'
+import { useSAKURACardStore } from '../modules'
 import { useSpeechRuntimeStore } from '../speech-runtime'
 
 export * from './notebook'
@@ -34,7 +34,7 @@ export function setCharacterLlmMarkerParserFactoryForTest(factory: ParserFactory
 }
 
 export const useCharacterStore = defineStore('character', () => {
-  const { activeCard, systemPrompt } = storeToRefs(useAiriCardStore())
+  const { activeCard, systemPrompt } = storeToRefs(useSAKURACardStore())
 
   const name = computed(() => activeCard.value?.name ?? '')
   const ownerId = computed(() => activeCard.value?.name ?? 'default')

@@ -1,11 +1,11 @@
-import type { AiriCard } from './modules'
+import type { SAKURACard } from './modules'
 
 import { createTestingPinia } from '@pinia/testing'
 import { setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { setCharacterLlmMarkerParserFactoryForTest, useCharacterStore } from './character'
-import { useAiriCardStore } from './modules'
+import { useSAKURACardStore } from './modules'
 import { useSpeechRuntimeStore } from './speech-runtime'
 
 vi.mock('vue-i18n', () => ({
@@ -60,15 +60,15 @@ describe('store character', () => {
     const speechRuntimeStore = useSpeechRuntimeStore(pinia)
     speechRuntimeStore.openIntent = openSpeechIntentSpy
 
-    const airiCardStore = useAiriCardStore(pinia)
+    const SAKURACardStore = useSAKURACardStore(pinia)
     // @ts-expect-error - testing purpose
-    airiCardStore.systemPrompt = 'You are a brave adventurer in Minecraft.'
+    SAKURACardStore.systemPrompt = 'You are a brave adventurer in Minecraft.'
     // @ts-expect-error - testing purpose
-    airiCardStore.activeCard = {
+    SAKURACardStore.activeCard = {
       name: 'Hero',
       version: '1.0',
       extensions: {
-        airi: {
+        SAKURA: {
           agents: {},
           modules: {
             consciousness: {
@@ -83,7 +83,7 @@ describe('store character', () => {
           },
         },
       },
-    } satisfies AiriCard
+    } satisfies SAKURACard
   })
 
   it('exposes name and system prompt from the active card', () => {
